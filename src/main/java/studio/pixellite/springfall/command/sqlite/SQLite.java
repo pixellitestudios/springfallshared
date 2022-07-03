@@ -47,7 +47,7 @@ public class SQLite implements Terminable {
   public SQLite(CommandPlugin plugin) {
     this.plugin = plugin;
     this.manager = new SQLiteConnectionManager(plugin);
-    this.worker = Executors.newCachedThreadPool(new ThreadFactoryBuilder()
+    this.worker = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder()
             .setDaemon(true)
             .setNameFormat("pixelliteconviencecommands-sqlite-worker")
             .build());
