@@ -4,7 +4,7 @@ import me.lucko.helper.Services;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
-import net.luckperms.api.node.Node;
+import net.luckperms.api.node.types.PermissionNode;
 import org.bukkit.entity.Player;
 import studio.pixellite.springfall.command.group.PrimaryGroupTracker;
 import studio.pixellite.springfall.command.utils.StringUtils;
@@ -45,8 +45,15 @@ public class LPPrimaryGroupTracker implements PrimaryGroupTracker {
 
   @Override
   public void setPermission(Player player, String permission, boolean value) {
+    if(value) {
+      luckPerms.getUserManager().modifyUser(player.getUniqueId(), user ->
+              user.data().add(PermissionNode.builder(permission).build())
+      );
+      return;
+    }
+
     luckPerms.getUserManager().modifyUser(player.getUniqueId(), user ->
-      user.data().add(Node.builder(permission).value(value).build())
+            user.data().remove(PermissionNode.builder(permission).build())
     );
   }
 }

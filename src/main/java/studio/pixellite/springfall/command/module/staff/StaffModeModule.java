@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 import studio.pixellite.springfall.command.CommandPlugin;
+import studio.pixellite.springfall.command.user.User;
 
 public class StaffModeModule implements TerminableModule {
   /** A metadata key containing all of the players currently in staff mode. */
@@ -77,18 +78,29 @@ public class StaffModeModule implements TerminableModule {
   }
 
   private void disableStaffMode(Player player, MetadataMap metadata) {
+    User user = plugin.getUserManager().getUserOrNull(player.getUniqueId());
+
     for(Player p : Bukkit.getOnlinePlayers()) {
       p.showPlayer(plugin, player);
     }
 
-    // update the player's gamemode and remove them from the key
+    // update the player's gamemode
     GameMode previousGamemode = metadata.getOrDefault(IN_STAFF_MODE, GameMode.SURVIVAL);
     player.setGameMode(previousGamemode);
-    metadata.remove(IN_STAFF_MODE);
+
+    // set the player's fly state if necessary
+    if(user != null && user.getPersistentTriggerStore().isFlightEnabled()) {
+      player.setAllowFlight(true);
+      player.setFlying(true);
+    }
 
     // check if we need to update the player's hidden permission
     if(!metadata.has(PREVIOUSLY_HIDDEN)) {
       plugin.getPrimaryGroupTracker().setPermission(player, HIDDEN_PERMISSION, false);
     }
+
+    // cleanup metadata
+    metadata.remove(IN_STAFF_MODE);
+    metadata.remove(PREVIOUSLY_HIDDEN);
   }
 }
