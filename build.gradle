@@ -1,0 +1,27 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'java'
+}
+
+compileJava.options.encoding('UTF-8')
+
+group 'studio.pixellite'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://papermc.io/repo/repository/maven-public/' }
+    maven { url 'https://repo.lucko.me/' }
+}
+
+shadowJar {
+    relocate 'org.cache2k', 'studio.pixellite.libs.cache2k'
+}
+
+dependencies {
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.1'
+
+    compileOnly 'io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT'
+    compileOnly 'me.lucko:helper:5.6.10'
+    compileOnly 'net.luckperms:api:5.4'
+}

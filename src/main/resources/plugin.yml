@@ -1,0 +1,8 @@
+name: SpringfallConvenienceCommands
+author: Pixellite Studios
+version: 1.0.0
+api-version: 1.13
+main: studio.pixellite.springfall.command.CommandPlugin
+website: https://pixellite.studio/
+depend: [helper]
+softdepend: [LuckPerms, helper-sql]

@@ -1,0 +1,4 @@
+join-messages:
+  enabled: false
+  join: '{player} has joined.'
+  leave: '{player} has left.'
