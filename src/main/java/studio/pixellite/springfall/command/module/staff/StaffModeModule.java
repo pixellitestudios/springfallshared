@@ -99,6 +99,9 @@ public class StaffModeModule implements TerminableModule {
       plugin.getPrimaryGroupTracker().setPermission(player, HIDDEN_PERMISSION, false);
     }
 
+    // inform player
+    Players.msg(player, "&cDisabling staff mode. You are now visible to all players.");
+
     // cleanup metadata
     metadata.remove(IN_STAFF_MODE);
     metadata.remove(PREVIOUSLY_HIDDEN);
