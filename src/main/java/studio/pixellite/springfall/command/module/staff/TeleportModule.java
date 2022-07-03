@@ -62,11 +62,11 @@ public class TeleportModule implements TerminableModule {
                         playerLoc.getPitch()));
 
                 Players.msg(player, StringUtils.concat("&3Teleporting you to &b",
-                        String.valueOf(x),
+                        Double.toString(x),
                         ", ",
-                        String.valueOf(y),
+                        Double.toString(y),
                         ", ",
-                        String.valueOf(x),
+                        Double.toString(z),
                         "&3."));
               }
             })
