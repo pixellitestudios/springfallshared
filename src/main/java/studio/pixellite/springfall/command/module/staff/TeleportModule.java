@@ -92,7 +92,7 @@ public class TeleportModule implements TerminableModule {
               if(plugin.getPrimaryGroupTracker().comparePrimaryGroups(player, target)) {
                 Players.msg(player, "&3Silently teleporting &b" + target.getName() + " &3to your location.");
               } else {
-                Players.msg(target, "&3Teleporting to &b" + target.getName() + "'s location.");
+                Players.msg(target, "&3Teleporting to &b" + target.getName() + "'s &3location.");
                 Players.msg(player, "&3Teleporting &b" + target.getName() + " &3to your location.");
               }
             })
