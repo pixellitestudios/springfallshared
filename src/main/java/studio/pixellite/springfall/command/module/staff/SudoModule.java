@@ -7,6 +7,7 @@ import me.lucko.helper.utils.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import studio.pixellite.springfall.command.utils.StringUtils;
 
 public class SudoModule implements TerminableModule {
   @Override
@@ -16,7 +17,7 @@ public class SudoModule implements TerminableModule {
             .assertUsage("<player> <command>")
             .handler(c -> {
               Player target = Bukkit.getPlayer(c.arg(0).parseOrFail(String.class));
-              String command = c.arg(1).parseOrFail(String.class);
+              String command = StringUtils.joinList(c.args(), 1);
 
               if(target == null) {
                 Players.msg(c.sender(), "&cThat player is not online.");
