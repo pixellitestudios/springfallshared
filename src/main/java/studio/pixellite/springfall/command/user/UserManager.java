@@ -1,7 +1,5 @@
 package studio.pixellite.springfall.command.user;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import me.lucko.helper.Events;
 import me.lucko.helper.text3.Text;
 import org.bukkit.event.EventPriority;
@@ -10,7 +8,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import studio.pixellite.springfall.command.CommandPlugin;
 
-import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,12 +21,6 @@ public class UserManager {
 
   /** The primary plugin instance. */
   private final CommandPlugin plugin;
-
-  /** A cache that stores recently disconnected user objects. This is to save time & effort in the
-   * event that a user leaves then immediately rejoins. */
-  private final Cache<UUID, User> recentlyDisconnected = Caffeine.newBuilder()
-          .expireAfterWrite(Duration.ofMinutes(2))
-          .build();
 
   public UserManager(CommandPlugin plugin) {
     this.plugin = plugin;
@@ -110,21 +101,15 @@ public class UserManager {
         return;
       }
 
-      // get the player's associated user object.
-      User user = recentlyDisconnected.getIfPresent(e.getUniqueId());
-
-      if(user == null) {
-        // load the player's user object from the database, creating one if needed, because
-        // we aren't carrying any time-sensitive or otherwise important data (and other data
-        // is updated on change), we have no need to save the user back to the database if a
-        // new one is created
-        //
-        // joining as to prevent the login from continuing until the user's data is loaded
-        user = plugin.getSqLite().loadOrMakeUser(e.getUniqueId(), e.getName()).join();
-      }
-
-      // add the user to the manager
-      registerUser(user);
+      // load the player's user object from the database, creating one if needed, because
+      // we aren't carrying any time-sensitive or otherwise important data (and other data
+      // is updated on change), we have no need to save the user back to the database if a
+      // new one is created
+      //
+      // joining as to prevent the login from continuing until the user's data is loaded
+      registerUser(plugin.getSqLite()
+              .loadOrMakeUser(e.getUniqueId(), e.getName())
+              .join());
     }
 
     @SuppressWarnings("deprecation")
@@ -159,7 +144,6 @@ public class UserManager {
       // perform one last data save and then remove them from the manager's cache
       plugin.getSqLite().saveUser(user);
       unregisterUser(user.getUniqueId());
-      recentlyDisconnected.put(user.getUniqueId(), unregisterUser(user.getUniqueId()));
     }
   }
 }
