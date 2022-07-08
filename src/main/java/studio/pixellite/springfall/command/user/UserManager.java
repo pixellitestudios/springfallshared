@@ -158,6 +158,7 @@ public class UserManager {
 
       // perform one last data save and then remove them from the manager's cache
       plugin.getSqLite().saveUser(user);
+      unregisterUser(user.getUniqueId());
       recentlyDisconnected.put(user.getUniqueId(), unregisterUser(user.getUniqueId()));
     }
   }
