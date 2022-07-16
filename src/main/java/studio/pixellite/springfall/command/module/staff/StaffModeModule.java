@@ -12,6 +12,7 @@ import me.lucko.helper.utils.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 import studio.pixellite.springfall.command.CommandPlugin;
@@ -39,15 +40,7 @@ public class StaffModeModule implements TerminableModule {
     Commands.create()
             .assertPlayer()
             .assertPermission("pixellite.commands.staffmode")
-            .handler(c -> {
-              MetadataMap metadata = Metadata.provideForPlayer(c.sender());
-
-              if(metadata.has(IN_STAFF_MODE)) {
-                disableStaffMode(c.sender(), metadata);
-              } else {
-                enableStaffMode(c.sender(), metadata);
-              }
-            })
+            .handler(c -> staffMode(c.sender()))
             .registerAndBind(consumer, "staffmode", "sm");
 
     Events.subscribe(PlayerQuitEvent.class)
@@ -56,6 +49,32 @@ public class StaffModeModule implements TerminableModule {
               // if the player is in staff mode, exit staff mode
               disableStaffMode(e.getPlayer(), Metadata.provideForPlayer(e.getPlayer()))
             ).bindWith(consumer);
+
+    Events.subscribe(PlayerJoinEvent.class)
+            .filter(e -> !e.getPlayer().hasPermission("pixellite.staff"))
+            .handler(e -> {
+              for(Player player : Bukkit.getOnlinePlayers()) {
+                if(Metadata.provideForPlayer(player).has(IN_STAFF_MODE)) {
+                  e.getPlayer().hidePlayer(plugin, player);
+                }
+              }
+            })
+            .bindWith(consumer);
+  }
+
+  /**
+   * Does the appropriate calculates to place someone in staff mode.
+   *
+   * @param player
+   */
+  private void staffMode(Player player) {
+    MetadataMap metadata = Metadata.provideForPlayer(player);
+
+    if(metadata.has(IN_STAFF_MODE)) {
+      disableStaffMode(player, metadata);
+    } else {
+      enableStaffMode(player, metadata);
+    }
   }
 
   private void enableStaffMode(Player player, MetadataMap metadata) {
