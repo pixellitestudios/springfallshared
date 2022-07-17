@@ -2,7 +2,7 @@ name: PixelliteShared
 author: Pixellite Studios
 version: 1.1.0
 api-version: 1.13
-main: studio.pixellite.springfall.command.CommandPlugin
+main: studio.pixellite.shared.SharedPlugin
 website: https://pixellite.studio/
 depend: [helper]
 softdepend: [LuckPerms, helper-sql]
