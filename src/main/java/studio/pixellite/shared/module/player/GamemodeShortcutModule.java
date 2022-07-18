@@ -3,8 +3,6 @@ package studio.pixellite.shared.module.player;
 import me.lucko.helper.Commands;
 import me.lucko.helper.terminable.TerminableConsumer;
 import me.lucko.helper.terminable.module.TerminableModule;
-import me.lucko.helper.utils.Players;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,30 +14,29 @@ public class GamemodeShortcutModule implements TerminableModule {
     Commands.create()
             .assertPlayer()
             .assertPermission(PERMISSION)
-            .handler(c -> changeGamemode(c.sender(), GameMode.CREATIVE))
+            .handler(c -> changeGamemode(c.sender(), "creative"))
             .registerAndBind(consumer, "gmc");
 
     Commands.create()
             .assertPlayer()
             .assertPermission(PERMISSION)
-            .handler(c -> changeGamemode(c.sender(), GameMode.ADVENTURE))
+            .handler(c -> changeGamemode(c.sender(), "adventure"))
             .registerAndBind(consumer, "gma");
 
     Commands.create()
             .assertPlayer()
             .assertPermission(PERMISSION)
-            .handler(c -> changeGamemode(c.sender(), GameMode.SPECTATOR))
+            .handler(c -> changeGamemode(c.sender(), "spectator"))
             .registerAndBind(consumer, "gmsp");
 
     Commands.create()
             .assertPlayer()
             .assertPermission(PERMISSION)
-            .handler(c -> changeGamemode(c.sender(), GameMode.SURVIVAL))
+            .handler(c -> changeGamemode(c.sender(), "survival"))
             .registerAndBind(consumer, "gms");
   }
 
-  private void changeGamemode(Player player, GameMode gameMode) {
-    player.setGameMode(gameMode);
-    Players.msg(player, "&3Set your gamemode to &b" + gameMode);
+  private void changeGamemode(Player player, String gameMode) {
+    player.performCommand("gamemode " + gameMode);
   }
 }

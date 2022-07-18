@@ -18,6 +18,9 @@ import org.jetbrains.annotations.NotNull;
 import studio.pixellite.shared.SharedPlugin;
 import studio.pixellite.shared.user.User;
 
+/**
+ * @deprecated will be implemented in the new/separate staff mode plugin
+ */
 public class StaffModeModule implements TerminableModule {
   /** A metadata key containing all of the players currently in staff mode. */
   private static final MetadataKey<GameMode> IN_STAFF_MODE =

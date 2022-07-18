@@ -4,12 +4,9 @@ import me.lucko.helper.plugin.ExtendedJavaPlugin;
 import org.bukkit.Bukkit;
 import studio.pixellite.shared.group.impl.SimplePrimaryGroupTracker;
 import studio.pixellite.shared.module.joinleave.JoinLeaveModule;
-import studio.pixellite.shared.module.player.AnvilModule;
-import studio.pixellite.shared.module.player.EnderChestModule;
 import studio.pixellite.shared.module.player.FlyModule;
 import studio.pixellite.shared.module.player.GamemodeShortcutModule;
 import studio.pixellite.shared.module.staff.BroadcastModule;
-import studio.pixellite.shared.module.staff.StaffModeModule;
 import studio.pixellite.shared.module.staff.SudoModule;
 import studio.pixellite.shared.module.staff.TeleportModule;
 import studio.pixellite.shared.sqlite.SQLite;
@@ -62,13 +59,10 @@ public class SharedPlugin extends ExtendedJavaPlugin {
 
   protected void bindModules() {
     bindModule(new JoinLeaveModule(this));
-    bindModule(new AnvilModule());
-    bindModule(new EnderChestModule());
     bindModule(new FlyModule(this));
     bindModule(new GamemodeShortcutModule());
     bindModule(new TeleportModule(this));
     bindModule(new SudoModule());
-    bindModule(new StaffModeModule(this));
     bindModule(new BroadcastModule());
   }
 
